@@ -1,28 +1,21 @@
-import bottle
-from passlib.hash import pbkdf2_sha256
+from bottle import HTTPError, post, request, response
 
-from lib.models import Login, User
+from lib.auth import authenticate
 
-@bottle.get('/auth')
+@post('/auth')
 def auth():
-    data = bottle.request.json
+    data = request.json
     
-    try:
-        login = (Login
-                .select()
-                .join(User)
-                .where(User.email == data['email'])
-                .dicts()
-                .get())
-                
-        hash = pbkdf2_sha256.hash(data['password'])
-        if not pbkdf2_sha256.verify(hash, login['hash']):
-            raise Exception('The user could not be authenticated.')
-            
-        return {
-            'data': 'Authenticated'
-        }
-    except Exception as e:
-        return {
-            'error': str(e)
-        }
+    if data is None or not {'email', 'password'}.issubset(data):
+        raise HTTPError(status=400, body='The data is incomplete.')
+    
+    user_id = authenticate(data['email'], data['password'])
+    
+    if user_id is None:
+        raise HTTPError(status=401, body='Authentication failed.')
+
+    session = request.environ.get('beaker.session')
+    session['user_id'] = user_id
+    session.save()
+    
+    response.status = 204
