@@ -11,4 +11,8 @@ class User(BaseModel):
     last_name = CharField()
     email = CharField()
     
-database.create_tables([User])
+class Login(BaseModel):
+    hash = CharField()
+    user = ForeignKeyField(User, unique=False, primary_key=True)
+    
+database.create_tables([Login, User])
