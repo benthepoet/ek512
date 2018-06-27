@@ -1,21 +1,21 @@
 from bottle import HTTPError, request
 
+from api.helpers import get_session, user_id
 import lib.users as users
 
 def authenticated(func):
-    def func_wrapper():
-        session = request.environ.get('beaker.session')
+    def func_wrapper(*args, **kwargs):
+        session = get_session()
     
         if 'user_id' in session:    
-            return func()
+            return func(*args, **kwargs)
             
         raise HTTPError(status=401)
     return func_wrapper
     
 def superuser(func):
     def func_wrapper():
-        session = request.environ.get('beaker.session')
-        user = users.get(session['user_id'])
+        user = users.get(user_id())
         
         if user['is_superuser']:
             return func()
