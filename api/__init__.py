@@ -2,7 +2,7 @@ import bottle
 import uuid
 from beaker.middleware import SessionMiddleware
 
-import api.routes.auth
+from api.routes import auth
 
 session_opts = {
     'session.type': 'cookie',
