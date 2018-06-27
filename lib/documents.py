@@ -30,7 +30,7 @@ def get_elements(user_id, document_id):
         .where(Document.id == document_id & Document.owner == user_id)
     )
     
-def update_document(user_id, document_id, document):
+def update(user_id, document_id, document):
     return (
         Document
         .update(**document)
