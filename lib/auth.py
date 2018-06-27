@@ -1,15 +1,18 @@
-from passlib.hash import pbkdf2_sha256
+import bcrypt
 
 from lib.models import User
 
-def authenticate(email, password):
+def register(email, password):
+    password_hash = bcrypt.hashpw(password, bcrypt.gensalt())
+    user = User.create(username=email, email=email, password_hash=password_hash)
+    return user.id
+
+def sign_in(email, password):
     user = (
         User
         .select()
-        .where(User.email == email)
+        .where(User.username == email)
         .get()
     )
-            
-    hash = pbkdf2_sha256.hash(password)
-    
-    user.id if pbkdf2_sha256.verify(hash, user.password) else None
+
+    user.id if bcrypt.checkpw(password, user.password_hash) else None
