@@ -10,10 +10,6 @@ def register():
         raise HTTPError(status=400)
         
     user_id = auth.register(data['email'], data['password'])
-
-    if user_id is None:
-        raise HTTPError(status=401)
-        
     init_session(user_id)
     
     response.status = 204
@@ -26,10 +22,6 @@ def sign_in():
         raise HTTPError(status=400)
 
     user_id = auth.sign_in(data['email'], data['password'])
-
-    if user_id is None:
-        raise HTTPError(status=401)
-
     init_session(user_id)    
 
     response.status = 204

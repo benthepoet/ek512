@@ -19,7 +19,7 @@ class RolePermission(BaseModel):
 class User(BaseModel):
     email = CharField(unique=True)
     username = CharField(unique=True)
-    password_hash = CharField()
+    hash = BlobField()
     is_active = BooleanField(default=False)
     is_superuser = BooleanField(default=False)
 
