@@ -19,9 +19,8 @@ class RolePermission(BaseModel):
 
 class User(BaseModel):
     email = CharField(unique=True)
-    username = CharField(unique=True)
     hash = BlobField()
-    is_active = BooleanField(default=False)
+    is_confirmed = BooleanField(default=False)
     is_superuser = BooleanField(default=False)
 
 class UserRole(BaseModel):
@@ -30,9 +29,9 @@ class UserRole(BaseModel):
 
 class Document(BaseModel):
     name = CharField()
+    owner = ForeignKeyField(User)
     width = IntegerField(constraints=[Check('width > 0')])
     height = IntegerField(constraints=[Check('height > 0')])
-    owner = ForeignKeyField(User)
     created_at = TimestampField(default=datetime.datetime.now)
 
 class ElementType(BaseModel):

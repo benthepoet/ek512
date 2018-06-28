@@ -17,13 +17,11 @@ def run():
     
     editor_id = auth.register(email='editor@home.com', password='abc123')
     editor = User[editor_id]
-    editor.is_active = False
     editor.save()
     
     UserRole.create(user=editor, role=editor_role)
     
     superuser_id = auth.register(email='superuser@home.com', password='def456')
     superuser = User[superuser_id]
-    superuser.is_active = True
     superuser.is_superuser = True
     superuser.save()

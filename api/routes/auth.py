@@ -9,7 +9,7 @@ def register():
     if data is None or not {'email', 'password'}.issubset(data):
         raise HTTPError(status=400)
         
-    user_id = auth.register(data['email'], data['password'])
+    user_id = auth.register(**data)
     init_session(user_id)
     
     response.status = 204
@@ -21,7 +21,7 @@ def sign_in():
     if data is None or not {'email', 'password'}.issubset(data):
         raise HTTPError(status=400)
 
-    user_id = auth.sign_in(data['email'], data['password'])
+    user_id = auth.sign_in(**data)
     init_session(user_id)    
 
     response.status = 204
