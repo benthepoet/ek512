@@ -1,4 +1,4 @@
-import datetime
+import time
 from peewee import *
 
 database = SqliteDatabase('db.sqlite')
@@ -20,8 +20,10 @@ class RolePermission(BaseModel):
 class User(BaseModel):
     email = CharField(unique=True)
     hash = BlobField()
-    is_confirmed = BooleanField(default=False)
     is_superuser = BooleanField(default=False)
+    confirmed_at = TimestampField(null=True)
+    created_at = TimestampField(default=time.time)
+    reset_at = TimestampField(null=True)
 
 class UserRole(BaseModel):
     user = ForeignKeyField(User)
@@ -32,7 +34,7 @@ class Document(BaseModel):
     owner = ForeignKeyField(User)
     width = IntegerField(constraints=[Check('width > 0')])
     height = IntegerField(constraints=[Check('height > 0')])
-    created_at = TimestampField(default=datetime.datetime.now)
+    created_at = TimestampField(default=time.time)
 
 class ElementType(BaseModel):
     name = CharField()
