@@ -1,6 +1,6 @@
 from bottle import get, HTTPError
 
-from api.helpers import authorize
+from lib.helpers import authorize
 import lib.security as security
 
 @get('/users/me')

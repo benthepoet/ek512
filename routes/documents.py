@@ -1,6 +1,6 @@
 from bottle import get, HTTPError, post, request
 
-from api.helpers import authorize
+from lib.helpers import authorize
 import lib.documents as documents
 
 @get('/documents')

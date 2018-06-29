@@ -7,8 +7,8 @@ from itsdangerous import URLSafeTimedSerializer
 
 from lib.models import User
 
-confirm_serializer = URLSafeTimedSerializer()
-reset_serializer = URLSafeTimedSerializer()
+confirm_serializer = URLSafeTimedSerializer(uuid.uuid4())
+reset_serializer = URLSafeTimedSerializer(uuid.uuid4())
 
 def authenticate(email, password):
     try:
