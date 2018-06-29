@@ -22,5 +22,5 @@ def login():
     token = security.authenticate(**data)
     
     return {
-        'token': token
+        'token': token.decode()
     }
