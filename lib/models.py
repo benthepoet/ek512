@@ -1,12 +1,13 @@
+import os
 import time
 import uuid
 from peewee import *
 
-database = SqliteDatabase('db.sqlite')
+database_proxy = Proxy()
 
 class BaseModel(Model):
     class Meta:
-        database = database
+        database = database_proxy
 
 class Role(BaseModel):
     name = CharField()
@@ -40,6 +41,15 @@ class Element(BaseModel):
     width = IntegerField(default=0, constraints=[Check('width > 0')])
     height = IntegerField(default=0, constraints=[Check('height > 0')])
     radius = IntegerField(default=0, constraints=[Check('radius > 0')])
+
+build_env = os.environ['BUILD_ENV']
+
+if build_env == 'test':
+    database = SqliteDatabase(':memory:')
+else:
+    database = SqliteDatabase('db.sqlite')
+
+database_proxy.initialize(database)
 
 database.create_tables([
     Document,

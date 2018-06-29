@@ -5,7 +5,7 @@ import app as main
 
 app = TestApp(main.app)
 
-class TestResources(unittest.TestCase):
+class TestAuth(unittest.TestCase):
 
     def test_login(self):
         params = dict(email='editor@home.com', password='abc123')
