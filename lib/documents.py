@@ -1,10 +1,9 @@
 from lib.models import Document, Element
 
-def create(document):
+def create(**document):
     return Document.create(**document)
 
-def create_element(user_id, element):
-    document = get(user_id, element.document_id)
+def create_element(element):
     return Element.create(**element)
 
 def find(user_id):
