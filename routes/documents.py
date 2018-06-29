@@ -6,7 +6,7 @@ import lib.documents as documents
 @get('/documents')
 @authorize
 def find(user_id):
-    return documents.find(user_id) or []
+    return list(documents.find(user_id))
 
 @post('/documents')
 @authorize
