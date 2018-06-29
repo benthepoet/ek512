@@ -1,0 +1,20 @@
+image: python:latest
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
+
+cache:
+  paths:
+    - .cache/pip
+    - .env/
+
+before_script:
+  - python -V
+  - pip install virtualenv
+  - virtualenv .env
+  - source .env/bin/activate
+  - pip install -r requirements.txt
+
+test:
+  script:
+  - python -m unittest tests.functional
