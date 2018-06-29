@@ -1,19 +1,28 @@
-from bottle import get, HTTPError
+from bottle import get, HTTPError, post, request
 
-from api.helpers import user_id
+from api.helpers import authorize
 import lib.documents as documents
 
 @get('/documents')
-def find():
-    return documents.find(user_id())
+@authorize
+def find(user_id):
+    return documents.find(user_id)
+
+@post('/documents')
+@authorize
+def create():
+    data = request.json
+    return documents.create(**data)
 
 @get('/documents/<document_id:int>')
-def document(document_id):
+@authorize
+def document(user_id, document_id):
     try:
-        return documents.get(user_id(), document_id)
+        return documents.get(user_id, document_id)
     except Exception:
         raise HTTPError(status=404)
 
 @get('/documents/<document_id:int>/elements')
-def elements(document_id):
-    return documents.get_elements(user_id(), document_id)
+@authorize
+def elements(user_id, document_id):
+    return documents.get_elements(user_id, document_id)

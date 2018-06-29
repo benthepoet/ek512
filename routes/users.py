@@ -1,13 +1,12 @@
-from bottle import get, HTTPError, request, response
+from bottle import get, HTTPError
 
-from api.helpers import user_id
-from api.middleware import authenticated
-import lib.users as users
+from api.helpers import authorize
+import lib.security as security
 
 @get('/users/me')
-@authenticated
-def me():
+@authorize
+def me(user_id):
     try:
-        return users.get(user_id())
+        return security.get_user(user_id)
     except Exception:
         raise HTTPError(status=404)

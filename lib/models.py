@@ -1,4 +1,5 @@
 import time
+import uuid
 from peewee import *
 
 database = SqliteDatabase('db.sqlite')
@@ -7,23 +8,15 @@ class BaseModel(Model):
     class Meta:
         database = database
 
-class Permission(BaseModel):
-    name = CharField()
-
 class Role(BaseModel):
     name = CharField()
-
-class RolePermission(BaseModel):
-    permission = ForeignKeyField(Permission)
-    role = ForeignKeyField(Role)
 
 class User(BaseModel):
     email = CharField(unique=True)
     hash = BlobField()
-    is_superuser = BooleanField(default=False)
     confirmed_at = TimestampField(null=True)
     created_at = TimestampField(default=time.time)
-    reset_at = TimestampField(null=True)
+    reset_key = UUIDField(default=uuid.uuid4)
 
 class UserRole(BaseModel):
     user = ForeignKeyField(User)
@@ -52,9 +45,7 @@ database.create_tables([
     Document,
     Element,
     ElementType,
-    Permission, 
     Role, 
-    RolePermission, 
     User,
     UserRole
 ])

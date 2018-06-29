@@ -1,32 +1,26 @@
 from bottle import HTTPError, post, request, response
 
-import lib.auth as auth
+import lib.security as security
 
-@post('/auth/register')
-def register():
+@post('/auth/signup')
+def signup():
     data = request.json
     
     if data is None or not {'email', 'password'}.issubset(data):
         raise HTTPError(status=400)
         
-    user_id = auth.register(**data)
-    init_session(user_id)
-    
+    security.create_user(**data)
     response.status = 204
 
-@post('/auth/sign-in')
-def sign_in():
+@post('/auth/login')
+def login():
     data = request.json
 
     if data is None or not {'email', 'password'}.issubset(data):
         raise HTTPError(status=400)
 
-    user_id = auth.sign_in(**data)
-    init_session(user_id)    
-
-    response.status = 204
+    token = security.authenticate(**data)
     
-def init_session(user_id):
-    session = request.environ.get('beaker.session')
-    session['user_id'] = user_id
-    session.save()
+    return {
+        'token': token
+    }
