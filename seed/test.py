@@ -17,3 +17,6 @@ def run():
     superuser.save()
     
     UserRole.create(user=superuser, role=superuser_role)
+    
+if __name__ == '__main__':
+    run()
