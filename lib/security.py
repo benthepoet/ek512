@@ -7,6 +7,8 @@ from itsdangerous import URLSafeTimedSerializer
 
 from lib.models import User
 
+TOKEN_MAX_AGE = 3600
+
 confirm_serializer = URLSafeTimedSerializer(uuid.uuid4())
 reset_serializer = URLSafeTimedSerializer(uuid.uuid4())
 
@@ -27,7 +29,7 @@ def authenticate(email, password):
         raise HTTPError(status=401)
 
 def confirm_user(token):
-    user_id = confirm_serializer.loads(token, max_age=3600)
+    user_id = confirm_serializer.loads(token, max_age=TOKEN_MAX_AGE)
     user = get_user(user_id)
     
     if user.confirmed_at is not None:
@@ -65,7 +67,7 @@ def get_user(user_id, safe=True):
     return user
 
 def reset_password(token, password):
-    user_id, reset_key = reset_serializer.loads(token, max_age=3600)
+    user_id, reset_key = reset_serializer.loads(token, max_age=TOKEN_MAX_AGE)
     user = get_user(user_id, False)
     
     if reset_key != user.reset_key:
