@@ -43,14 +43,12 @@ class Element(BaseModel):
     radius = IntegerField(default=0, constraints=[Check('radius > 0')])
 
 build_env = os.environ['BUILD_ENV']
-
 if build_env == 'test':
     database = SqliteDatabase(':memory:')
 else:
     database = SqliteDatabase('db.sqlite')
 
 database_proxy.initialize(database)
-
 database.create_tables([
     Document,
     Element,
