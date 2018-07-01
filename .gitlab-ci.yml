@@ -17,3 +17,4 @@ before_script:
 test:
   script:
   - python -m tests.auth
+  - python -m tests.documents

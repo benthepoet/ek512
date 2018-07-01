@@ -38,9 +38,9 @@ class Element(BaseModel):
     element_type = ForeignKeyField(ElementType)
     x = IntegerField()
     y = IntegerField()
-    width = IntegerField(default=0, constraints=[Check('width > 0')])
-    height = IntegerField(default=0, constraints=[Check('height > 0')])
-    radius = IntegerField(default=0, constraints=[Check('radius > 0')])
+    width = IntegerField(default=0, constraints=[Check('width >= 0')])
+    height = IntegerField(default=0, constraints=[Check('height >= 0')])
+    radius = IntegerField(default=0, constraints=[Check('radius >= 0')])
 
 build_env = os.environ['BUILD_ENV']
 if build_env == 'test':
