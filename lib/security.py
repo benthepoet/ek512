@@ -29,7 +29,11 @@ def authenticate(email, password):
         raise HTTPError(status=401)
 
 def confirm_user(token):
-    user_id = confirm_serializer.loads(token, max_age=TOKEN_MAX_AGE)
+    try:
+        user_id = confirm_serializer.loads(token, max_age=TOKEN_MAX_AGE)
+    except Exception:
+        raise HTTPError(status=400)
+        
     user = get_user(user_id)
     
     if user.confirmed_at is not None:
@@ -37,8 +41,6 @@ def confirm_user(token):
     
     user.confirmed_at = time.time()
     user.save()
-    
-    return True
 
 def create_user(email, password):
     hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
@@ -67,7 +69,11 @@ def get_user(user_id, safe=True):
     return user
 
 def reset_password(token, password):
-    user_id, reset_key = reset_serializer.loads(token, max_age=TOKEN_MAX_AGE)
+    try:
+        user_id, reset_key = reset_serializer.loads(token, max_age=TOKEN_MAX_AGE)
+    except Exception:
+        raise HTTPError(status=400)
+    
     user = get_user(user_id, False)
     
     if reset_key != user.reset_key:
