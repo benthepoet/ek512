@@ -1,16 +1,20 @@
+from playhouse.shortcuts import model_to_dict
+
 from lib.models import Document, Element
 
-def create(**document):
-    return Document.create(**document)
+def create(**data):
+    document = Document.create(**data)
+    return model_to_dict(document, recurse=False)
 
-def create_element(element):
-    return Element.create(**element)
+def create_element(data):
+    return Element.create(**data)
 
 def find(user_id):
     return (
         Document
         .select()
         .where(Document.owner == user_id)
+        .dicts()
     )
     
 def get(user_id, document_id):
@@ -18,6 +22,7 @@ def get(user_id, document_id):
         Document
         .select()
         .where(Document.id == document_id & Document.owner == user_id)
+        .dicts()
         .get()
     )
     

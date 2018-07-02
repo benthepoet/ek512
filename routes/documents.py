@@ -7,7 +7,7 @@ import lib.documents as documents
 @authorize
 def find(user_id):
     return {
-        'data': list(documents.find(user_id).dicts())
+        'data': list(documents.find(user_id))
     }
 
 @post('/documents')
