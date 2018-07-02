@@ -33,6 +33,7 @@ def get_elements(user_id, document_id):
         .select()
         .join(Document)
         .where((Document.id == document_id) & (Document.owner == user_id))
+        .dicts()
     )
     
 def update(user_id, document_id, document):

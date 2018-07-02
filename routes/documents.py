@@ -28,7 +28,7 @@ def document(user_id, document_id):
 @authorize
 def elements(user_id, document_id):
     return {
-        'data': documents.get_elements(user_id, document_id)
+        'data': list(documents.get_elements(user_id, document_id))
     }
 
 @post('/documents/<document_id:int>/elements')
