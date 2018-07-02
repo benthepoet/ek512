@@ -15,8 +15,9 @@ before_script:
   - pip install -r requirements.txt
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
   - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
   - eval $(ssh-agent -s)
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
 
 test:
   script:
@@ -27,6 +28,5 @@ stage_deploy:
   only:
   - master
   script:
-  - ssh-add <(echo "$STAGING_PRIVATE_KEY")
   - git remote add staging bannon@ek512.benpaulhanna.com:/var/repo/ek512.git
   - git push staging master
