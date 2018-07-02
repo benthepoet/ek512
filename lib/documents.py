@@ -7,7 +7,8 @@ def create(**data):
     return model_to_dict(document, recurse=False)
 
 def create_element(data):
-    return Element.create(**data)
+    element = Element.create(**data)
+    return model_to_dict(element, recurse=False)
 
 def find(user_id):
     return (
@@ -21,7 +22,7 @@ def get(user_id, document_id):
     return (
         Document
         .select()
-        .where(Document.id == document_id & Document.owner == user_id)
+        .where((Document.id == document_id) & (Document.owner == user_id))
         .dicts()
         .get()
     )
@@ -31,14 +32,14 @@ def get_elements(user_id, document_id):
         Element
         .select()
         .join(Document)
-        .where(Document.id == document_id & Document.owner == user_id)
+        .where((Document.id == document_id) & (Document.owner == user_id))
     )
     
 def update(user_id, document_id, document):
     return (
         Document
         .update(**document)
-        .where(Document.id == document_id & Document.owner == user_id)
+        .where((Document.id == document_id) & (Document.owner == user_id))
     )
     
 def update_element(user_id, document_id, element):
@@ -46,6 +47,6 @@ def update_element(user_id, document_id, element):
         Element
         .update(**element)
         .join(Document)
-        .where(Document.id == document_id & Document.owner == user_id)
+        .where((Document.id == document_id) & (Document.owner == user_id))
         .execute()
     )
