@@ -47,6 +47,7 @@ class TestAuth(unittest.TestCase):
         
     def test_get_document_user_scoping(self):
         response = test_app.get('/documents/%s' % (DOCUMENT_ID + 1), status=404)
+        
         self.assertEqual(response.status_code, 404)
 
     def test_get_elements(self):
@@ -61,7 +62,14 @@ class TestAuth(unittest.TestCase):
             
     def test_get_elements_user_scoping(self):
         response = test_app.get('/documents/%s/elements' % (DOCUMENT_ID + 1), status=404)
+        
         self.assertEqual(response.status_code, 404)
+        
+    def test_update_document(self):
+        params = dict(name='Revised Document', width=640, height=480)
+        response = test_app.put_json('/documents/%s' % DOCUMENT_ID, params)
+        
+        self.assertEqual(response.status_code, 200)
 
 if __name__ == '__main__':
     unittest.main()

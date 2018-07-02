@@ -3,13 +3,11 @@ from playhouse.shortcuts import model_to_dict
 from lib.models import Document, Element
 
 def require_document(func):
-    def wrapper(*args, **kwargs):
-        user_id, document_id = args
-
+    def wrapper(user_id, document_id, data):
         if user_id and document_id:
             get(user_id, document_id)
         
-        return func(*args, **kwargs)
+        return func(user_id, document_id, data)
             
     return wrapper
 
@@ -53,6 +51,7 @@ def update(user_id, document_id, data):
         Document
         .update(**data)
         .where(Document.id == document_id)
+        .execute()
     )
     
 @require_document

@@ -1,4 +1,4 @@
-from bottle import get, HTTPError, post, request
+from bottle import get, HTTPError, post, put, request
 
 from lib.helpers import authorize
 import lib.documents as documents
@@ -21,6 +21,16 @@ def create(user_id):
 def document(user_id, document_id):
     try:
         return documents.get(user_id, document_id)
+    except Exception:
+        raise HTTPError(status=404)
+
+@put('/documents/<document_id:int>')
+@authorize
+def document(user_id, document_id):
+    data = request.json
+    
+    try:
+        return documents.update(user_id, document_id, data)
     except Exception:
         raise HTTPError(status=404)
 
