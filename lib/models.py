@@ -42,7 +42,7 @@ class Element(BaseModel):
     height = IntegerField(default=0, constraints=[Check('height >= 0')])
     radius = IntegerField(default=0, constraints=[Check('radius >= 0')])
 
-build_env = os.environ['BUILD_ENV']
+build_env = os.environ.get('BUILD_ENV')
 if build_env == 'test':
     database = SqliteDatabase(':memory:')
 else:
