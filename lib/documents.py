@@ -2,12 +2,12 @@ from playhouse.shortcuts import model_to_dict
 
 from lib.models import Document, Element
 
-def user_document(func):
+def require_document(func):
     def wrapper(*args, **kwargs):
         user_id, document_id = args
 
         if user_id and document_id:
-            doc = get(user_id, document_id)
+            get(user_id, document_id)
         
         return func(*args, **kwargs)
             
@@ -38,7 +38,7 @@ def get(user_id, document_id):
         .get()
     )
 
-@user_document
+@require_document
 def get_elements(user_id, document_id):
     return (
         Element
@@ -46,19 +46,21 @@ def get_elements(user_id, document_id):
         .where(Element.document == document_id)
         .dicts()
     )
-    
-def update(user_id, document_id, document):
+ 
+@require_document
+def update(user_id, document_id, data):
     return (
         Document
-        .update(**document)
-        .where((Document.id == document_id) & (Document.owner == user_id))
+        .update(**data)
+        .where(Document.id == document_id)
     )
     
-def update_element(user_id, document_id, element):
+@require_document
+def update_element(user_id, document_id, data):
     return (
         Element
-        .update(**element)
+        .update(**data)
         .join(Document)
-        .where((Document.id == document_id) & (Document.owner == user_id))
+        .where(Document.id == document_id)
         .execute()
     )
