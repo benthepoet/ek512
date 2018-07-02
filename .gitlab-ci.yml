@@ -6,6 +6,10 @@ variables:
 cache:
   paths:
     - .env/
+    
+stages:
+  - test
+  - deploy
 
 before_script:
   - python -V
@@ -14,18 +18,22 @@ before_script:
   - source .env/bin/activate
   - pip install -r requirements.txt
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
   - eval $(ssh-agent -s)
   - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-  - cat ~/.ssh/id_rsa
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - ssh-keyscan benpaulhanna.com >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
 test:
+  stage: test
   script:
   - python -m tests.auth
   - python -m tests.documents
   
-stage_deploy:
+deploy_test:
+  stage: deploy
   only:
   - master
   script:
