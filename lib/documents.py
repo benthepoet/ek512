@@ -3,11 +3,14 @@ from playhouse.shortcuts import model_to_dict
 from lib.models import Document, Element
 
 def require_document(func):
-    def wrapper(user_id, document_id, data):
+    def wrapper(*args, **kwargs):
+        user_id = args[0]
+        document_id = args[1]
+        
         if user_id and document_id:
             get(user_id, document_id)
         
-        return func(user_id, document_id, data)
+        return func(*args, **kwargs)
             
     return wrapper
 

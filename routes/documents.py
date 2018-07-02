@@ -30,7 +30,9 @@ def document(user_id, document_id):
     data = request.json
     
     try:
-        return documents.update(user_id, document_id, data)
+        return {
+            'data': documents.update(user_id, document_id, data)
+        }
     except Exception:
         raise HTTPError(status=404)
 
