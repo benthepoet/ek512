@@ -60,11 +60,8 @@ class TestAuth(unittest.TestCase):
             self.assertEqual(element.get('document'), DOCUMENT_ID)
             
     def test_get_elements_user_scoping(self):
-        response = test_app.get('/documents/%s/elements' % (DOCUMENT_ID + 1))
-        elements = response.json.get('data')
-        
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(not elements)
+        response = test_app.get('/documents/%s/elements' % (DOCUMENT_ID + 1), status=404)
+        self.assertEqual(response.status_code, 404)
 
 if __name__ == '__main__':
     unittest.main()

@@ -27,9 +27,12 @@ def document(user_id, document_id):
 @get('/documents/<document_id:int>/elements')
 @authorize
 def elements(user_id, document_id):
-    return {
-        'data': list(documents.get_elements(user_id, document_id))
-    }
+    try:
+        return {
+            'data': list(documents.get_elements(user_id, document_id))
+        }
+    except Exception:
+        raise HTTPError(status=404)
 
 @post('/documents/<document_id:int>/elements')
 @authorize
