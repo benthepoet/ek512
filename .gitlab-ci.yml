@@ -2,6 +2,7 @@ image: python:latest
 
 variables:
   BUILD_ENV: "test"
+  SSH_DOMAIN: "benpaulhanna.com"
 
 cache:
   paths:
@@ -11,24 +12,14 @@ stages:
   - test
   - deploy
 
-before_script:
+test:
+  stage: test
+  before_script:
   - python -V
   - pip install virtualenv
   - virtualenv .env
   - source .env/bin/activate
   - pip install -r requirements.txt
-  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-  - eval $(ssh-agent -s)
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-  - echo "$SSH_PRIVATE_KEY"
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
-  - ssh-keyscan benpaulhanna.com >> ~/.ssh/known_hosts
-  - chmod 644 ~/.ssh/known_hosts
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-
-test:
-  stage: test
   script:
   - python -m tests.auth
   - python -m tests.documents
@@ -37,6 +28,15 @@ deploy_test:
   stage: deploy
   only:
   - master
+  before_script:
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - ssh-keyscan "$SSH_DOMAIN" >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-  - git remote add staging bannon@ek512.benpaulhanna.com:/var/repo/ek512.git
+  - git remote add staging "bannon@$SSH_DOMAIN:/var/repo/ek512.git"
   - git push staging master
