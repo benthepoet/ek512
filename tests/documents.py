@@ -36,15 +36,18 @@ class TestAuth(unittest.TestCase):
         self.assertIsNotNone(document)
         self.assertEqual(document.get('id'), DOCUMENT_ID)
         self.assertEqual(document.get('owner'), USER_ID)
+        
+    def test_get_document_not_found(self):
+        response = test_app.get('/documents/%s' % (DOCUMENT_ID + 1), status=404)
+        self.assertEqual(response.status_code, 404)
 
-    def test_create_and_get_document(self):
+    def test_create_document(self):
         params = dict(name='New Document', width=224, height=224)
         response = test_app.post_json('/documents', params)
         document = response.json
         
         self.assertEqual(response.status_code, 200)
         self.assertEqual(document.get('owner'), USER_ID)
-        print(document)
 
 if __name__ == '__main__':
     unittest.main()
