@@ -11,14 +11,14 @@ def authorize(func):
         header = req.env.get('HTTP_AUTHORIZATION')
         
         if not header:
-            raise falcon.HTTPError(falcon.HTTP_401)
+            raise falcon.HTTPUnauthorized(description='No authorization header was found.')
             
         token = header.split(' ').pop()
         
         try:
             claims = jwt.decode(token, 'secret', algorithms=['HS256'])
         except Exception:
-            raise falcon.HTTPError(falcon.HTTP_401)
+            raise falcon.HTTPUnauthorized(description='The token is invalid or expired.')
         
         return func(*args, **dict(kwargs, user_id=claims['user_id']))
     return func_wrapper
