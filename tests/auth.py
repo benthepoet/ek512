@@ -18,11 +18,11 @@ class TestAuth(unittest.TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-    def test_login_failure(self):
+    def test_login_not_found(self):
         params = dict(email='user@home.com', password='ghi789')
-        response = test_app.post_json('/auth/login', params, status=401)
+        response = test_app.post_json('/auth/login', params, status=404)
         
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 404)
         
     def test_signup(self):
         params = dict(email='user@home.com', password='ghi789')

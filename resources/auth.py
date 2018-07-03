@@ -2,8 +2,15 @@ import datetime
 import decimal
 import falcon
 import json
+import peewee
 
 import lib.security as security
+
+class Confirm(object):
+    def on_post(self, req, resp):
+        data = req.media
+        security.send_confirm_email(data['email'])
+        resp.status = falcon.HTTP_204
 
 class ConfirmToken(object):
     def on_post(self, req, resp, token):
@@ -13,12 +20,7 @@ class ConfirmToken(object):
 class Login(object):
     def on_post(self, req, resp):
         data = req.media
-
-        if data is None or not {'email', 'password'}.issubset(data):
-            raise falcon.HTTPError(falcon.HTTP_400)
-    
         token = security.authenticate(**data)
-        
         resp.media = dict(token=token.decode())
         
 class ResetToken(object):
@@ -29,11 +31,5 @@ class ResetToken(object):
 class SignUp(object):
     def on_post(self, req, resp):
         data = req.media
-    
-        if data is None or not {'email', 'password'}.issubset(data):
-            raise falcon.HTTPError(falcon.HTTP_400)
-            
         security.create_user(**data)
-        security.send_confirm_email(data['email'])
-        
         resp.status = falcon.HTTP_204

@@ -6,6 +6,7 @@ import resources.users as users
 
 api = falcon.API()
 
+api.add_route('/auth/confirm', auth.Confirm())
 api.add_route('/auth/confirm/{token}', auth.ConfirmToken())
 api.add_route('/auth/login', auth.Login())
 api.add_route('/auth/reset/{token}', auth.ResetToken())
