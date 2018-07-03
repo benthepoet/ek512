@@ -34,7 +34,7 @@ class ElementType(BaseModel):
     name = CharField()
 
 class Element(BaseModel):
-    document = ForeignKeyField(Document)
+    document = ForeignKeyField(Document, backref='elements')
     element_type = ForeignKeyField(ElementType)
     x = IntegerField()
     y = IntegerField()

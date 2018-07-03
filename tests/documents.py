@@ -5,6 +5,7 @@ from app import app
 import seeds.test
 
 DOCUMENT_ID = 1
+ELEMENT_ID = 1
 USER_ID = 1
 
 test_app = TestApp(app)
@@ -70,6 +71,28 @@ class TestAuth(unittest.TestCase):
         response = test_app.put_json('/documents/%s' % DOCUMENT_ID, params)
         
         self.assertEqual(response.status_code, 200)
+        
+    def test_update_document_user_scoping(self):
+        params = dict(name='Revised Document', width=640, height=480)
+        response = test_app.put_json('/documents/%s' % (DOCUMENT_ID + 1), params, status=404)
+        
+        self.assertEqual(response.status_code, 404)
+        
+    def test_update_element(self):
+        params = dict(x=64, y=64)
+        response = test_app.put_json('/documents/%s/elements/%s' % (DOCUMENT_ID, ELEMENT_ID), params)
+        
+        self.assertEqual(response.status_code, 200)
+        
+    def test_update_element_user_scoping(self):
+        params = dict(x=64, y=64)
+        response = test_app.put_json('/documents/%s/elements/%s' % (DOCUMENT_ID, ELEMENT_ID + 1), params, status=404)
+        
+        self.assertEqual(response.status_code, 404)
+        
+        response = test_app.put_json('/documents/%s/elements/%s' % (DOCUMENT_ID + 1, ELEMENT_ID), params, status=404)
+        
+        self.assertEqual(response.status_code, 404)
 
 if __name__ == '__main__':
     unittest.main()

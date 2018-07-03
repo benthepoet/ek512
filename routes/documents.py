@@ -7,7 +7,7 @@ import lib.documents as documents
 @authorize
 def find(user_id):
     return {
-        'data': list(documents.find(user_id))
+        'data': documents.find(user_id)
     }
 
 @post('/documents')
@@ -26,7 +26,7 @@ def document(user_id, document_id):
 
 @put('/documents/<document_id:int>')
 @authorize
-def document(user_id, document_id):
+def update(user_id, document_id):
     data = request.json
     
     try:
@@ -41,7 +41,7 @@ def document(user_id, document_id):
 def elements(user_id, document_id):
     try:
         return {
-            'data': list(documents.get_elements(user_id, document_id))
+            'data': documents.find_elements(user_id, document_id)
         }
     except Exception:
         raise HTTPError(status=404)
@@ -51,3 +51,15 @@ def elements(user_id, document_id):
 def create_element(user_id, document_id):
     data = request.json
     return documents.create_element(document=document_id, **data)
+
+@put('/documents/<document_id:int>/elements/<element_id:int>')
+@authorize
+def update_element(user_id, document_id, element_id):
+    data = request.json
+    
+    try:
+        return {
+            'data': documents.update_element(user_id, document_id, element_id, data)
+        }
+    except Exception:
+        raise HTTPError(status=404)
