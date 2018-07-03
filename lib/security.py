@@ -1,8 +1,8 @@
 import bcrypt
+import falcon
 import jwt
 import time
 import uuid
-from bottle import HTTPError
 from itsdangerous import URLSafeTimedSerializer
 
 from lib.models import User
@@ -26,18 +26,18 @@ def authenticate(email, password):
     
         return jwt.encode(claims, 'secret', algorithm='HS256')
     except Exception:
-        raise HTTPError(status=401)
+        raise falcon.HTTPError(falcon.HTTP_401)
 
 def confirm_user(token):
     try:
         user_id = confirm_serializer.loads(token, max_age=TOKEN_MAX_AGE)
     except Exception:
-        raise HTTPError(status=400)
+        raise falcon.HTTPError(falcon.HTTP_400)
         
     user = get_user(user_id)
     
     if user.confirmed_at is not None:
-        raise HTTPError(status=409)
+        raise falcon.HTTPError(falcon.HTTP_409)
     
     user.confirmed_at = time.time()
     user.save()
@@ -48,7 +48,7 @@ def create_user(email, password):
     try:
         user = User.create(email=email, hash=hash)
     except Exception:
-        raise HTTPError(status=409)
+        raise falcon.HTTPError(falcon.HTTP_409)
         
     return user
 
@@ -72,12 +72,12 @@ def reset_password(token, password):
     try:
         user_id, reset_key = reset_serializer.loads(token, max_age=TOKEN_MAX_AGE)
     except Exception:
-        raise HTTPError(status=400)
+        raise falcon.HTTPError(falcon.HTTP_400)
     
     user = get_user(user_id, False)
     
     if reset_key != user.reset_key:
-        raise HTTPError(status=409)
+        raise falcon.HTTPError(falcon.HTTP_409)
     
     user.hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
     user.reset_key = uuid.uuid4()
