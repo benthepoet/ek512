@@ -1,19 +1,34 @@
+import datetime
+import decimal
+import falcon
+import json
 import jwt
-from bottle import HTTPError, request
 
 def authorize(func):
     def func_wrapper(*args, **kwargs):
-        header = request.environ.get('HTTP_AUTHORIZATION')
+        req = args[1]
+        header = req.env.get('HTTP_AUTHORIZATION')
         
         if not header:
-            raise HTTPError(status=401)
+            raise falcon.HTTPError(falcon.HTTP_401)
             
         token = header.split(' ').pop()
         
         try:
             claims = jwt.decode(token, 'secret', algorithms=['HS256'])
         except Exception:
-            raise HTTPError(status=401)
+            raise falcon.HTTPError(falcon.HTTP_401)
         
         return func(*args, **dict(kwargs, user_id=claims['user_id']))
     return func_wrapper
+
+def json_serializer(obj):
+    if isinstance(obj, datetime.datetime):
+        return str(obj)
+    elif isinstance(obj, decimal.Decimal):
+        return str(obj)
+
+    raise TypeError('Cannot serialize {!r} (type {})'.format(obj, type(obj)))
+
+def to_json(data):
+    return json.dumps(data, default=json_serializer)
