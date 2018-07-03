@@ -14,7 +14,7 @@ class Role(BaseModel):
 class User(BaseModel):
     email = CharField(unique=True)
     hash = BlobField()
-    confirmed_at = TimestampField(null=True)
+    confirmed_at = TimestampField(default=None, null=True)
     created_at = TimestampField(default=time.time)
     reset_key = UUIDField(default=uuid.uuid4)
 
