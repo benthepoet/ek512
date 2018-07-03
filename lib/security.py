@@ -27,8 +27,9 @@ def authenticate(email, password):
         raise falcon.HTTPUnauthorized(description='The user could not be authenticated.')
         
     claims = {
-        'user_id': user.id,
-        'iss': time.time()
+        'exp': time.time() + 60 * 60 * 24,
+        'iat': time.time(),
+        'user_id': user.id
     }
 
     return jwt.encode(claims, 'secret', algorithm='HS256')
