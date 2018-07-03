@@ -3,6 +3,7 @@ import decimal
 import falcon
 import json
 import jwt
+import uuid
 
 def authorize(func):
     def func_wrapper(*args, **kwargs):
@@ -26,6 +27,8 @@ def json_serializer(obj):
     if isinstance(obj, datetime.datetime):
         return str(obj)
     elif isinstance(obj, decimal.Decimal):
+        return str(obj)
+    elif isinstance(obj, uuid.UUID):
         return str(obj)
 
     raise TypeError('Cannot serialize {!r} (type {})'.format(obj, type(obj)))

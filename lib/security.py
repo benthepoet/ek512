@@ -4,6 +4,7 @@ import jwt
 import time
 import uuid
 from itsdangerous import URLSafeTimedSerializer
+from playhouse.shortcuts import model_to_dict
 
 from lib.models import User
 
@@ -34,7 +35,7 @@ def confirm_user(token):
     except Exception:
         raise falcon.HTTPError(falcon.HTTP_400)
         
-    user = get_user(user_id)
+    user = User[user_id]
     
     if user.confirmed_at is not None:
         raise falcon.HTTPError(falcon.HTTP_409)
@@ -60,13 +61,9 @@ def get_reset_token(email):
     user = User.get(User.email == email)
     return reset_serializer.dumps((user.id, user.reset_key))
 
-def get_user(user_id, safe=True):
-    user = User.get(User.id == user_id)
-    
-    if safe:
-        user.pop('hash', None)
-    
-    return user
+def get_user(user_id):
+    user = User[user_id]
+    return model_to_dict(user, recurse=False, exclude=[User.hash])
 
 def reset_password(token, password):
     try:
@@ -74,7 +71,7 @@ def reset_password(token, password):
     except Exception:
         raise falcon.HTTPError(falcon.HTTP_400)
     
-    user = get_user(user_id, False)
+    user = User[user_id]
     
     if reset_key != user.reset_key:
         raise falcon.HTTPError(falcon.HTTP_409)
@@ -84,7 +81,7 @@ def reset_password(token, password):
     user.save()
 
 def update_password(user_id, password, new_password):
-    user = get_user(user_id, False)
+    user = User[user_id]
     
     if not bcrypt.checkpw(password.encode(), user.hash):
         raise Exception()
