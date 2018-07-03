@@ -25,18 +25,16 @@ class TestAuth(unittest.TestCase):
         self.assertEqual(response.status_code, 401)
         
     def test_signup(self):
-        #params = dict(email='user@home.com', password='ghi789')
-        #response = test_app.post_json('/auth/signup', params)
+        params = dict(email='user@home.com', password='ghi789')
+        response = test_app.post_json('/auth/signup', params)
         
-        #self.assertEqual(response.status_code, 204)
-        pass
+        self.assertEqual(response.status_code, 204)
         
     def test_signup_existing(self):
-        #params = dict(email='editor@home.com', password='ghi789')
-        #response = test_app.post_json('/auth/signup', params, status=409)
+        params = dict(email='editor@home.com', password='ghi789')
+        response = test_app.post_json('/auth/signup', params, status=409)
         
-        #self.assertEqual(response.status_code, 409)
-        pass
+        self.assertEqual(response.status_code, 409)
 
 if __name__ == '__main__':
     unittest.main()
