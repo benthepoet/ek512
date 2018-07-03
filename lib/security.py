@@ -12,8 +12,7 @@ from playhouse.shortcuts import model_to_dict
 
 from lib.models import User
 
-confirm_serializer = URLSafeTimedSerializer(str(uuid.uuid4()))
-reset_serializer = URLSafeTimedSerializer(str(uuid.uuid4()))
+token_serializer = URLSafeTimedSerializer(str(uuid.uuid4()))
 
 def authenticate(email, password):
     try:
@@ -36,7 +35,7 @@ def authenticate(email, password):
 
 def confirm_user(token):
     try:
-        user_id = confirm_serializer.loads(token, max_age=3600)
+        user_id = token_serializer.loads(token, max_age=3600)
     except Exception:
         raise falcon.HTTPBadRequest(description='The token is invalid or expired.')
         
@@ -68,7 +67,7 @@ def get_user(user_id):
 
 def reset_password(token, password):
     try:
-        user_id, reset_key = reset_serializer.loads(token, max_age=3600)
+        user_id, reset_key = token_serializer.loads(token, max_age=3600)
     except Exception:
         raise falcon.HTTPBadRequest(description='The token is invalid or expired.')
     
@@ -90,7 +89,7 @@ def send_confirm_email(email):
     except User.DoesNotExist:
         raise falcon.HTTPNotFound(description='The user does not exist.')
     
-    token = confirm_serializer.dumps(user.id)
+    token = token_serializer.dumps(user.id)
     
     message = MIMEText(token, 'plain')
     message['Subject'] = 'Confirm your email address'
@@ -117,7 +116,7 @@ def send_reset_email(email):
     except User.DoesNotExist:
         raise falcon.HTTPNotFound(description='The user does not exist.')
     
-    token = reset_serializer.dumps((user.id, str(user.reset_key)))
+    token = token_serializer.dumps((user.id, str(user.reset_key)))
     
     message = MIMEText(token, 'plain')
     message['Subject'] = 'Reset your password'

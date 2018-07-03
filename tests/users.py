@@ -2,7 +2,6 @@ import unittest
 from webtest import TestApp
 
 from app import api
-import seeds.test
 
 USER_ID = 1
 
@@ -12,7 +11,6 @@ class TestAuth(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        seeds.test.run()
         params = dict(email='editor@home.com', password='abc123')
         response = test_app.post_json('/auth/login', params)
         test_app.authorization = ('Bearer', response.json.get('token'))

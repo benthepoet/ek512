@@ -1,8 +1,21 @@
 import falcon
+import os
+
+from lib.models import *
 
 import resources.auth as auth
 import resources.documents as documents
 import resources.users as users
+
+import seeds.test as seed
+
+db_filename = os.environ.get('DB_FILENAME') or ':memory:'
+
+database.init(db_filename)
+database.create_tables([Document, Element, ElementType, Role, User, UserRole])
+
+if db_filename == ':memory:':
+    seed.run()
 
 api = falcon.API()
 

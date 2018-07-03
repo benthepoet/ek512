@@ -2,15 +2,10 @@ import unittest
 from webtest import TestApp
 
 from app import api
-import seeds.test
 
 test_app = TestApp(api)
 
 class TestAuth(unittest.TestCase):
-    
-    @classmethod
-    def setUpClass(cls):
-        seeds.test.run()
 
     def test_login(self):
         params = dict(email='editor@home.com', password='abc123')

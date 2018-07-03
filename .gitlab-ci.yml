@@ -23,6 +23,7 @@ test:
   script:
   - python -m tests.auth
   - python -m tests.documents
+  - python -m tests.users
   
 deploy_test:
   stage: deploy
