@@ -23,7 +23,7 @@ def run():
     
     superuser_id = security.create_user(email='superuser@home.com', password='def456')
     superuser = User[superuser_id]
-    editor.confirmed_at = time.time()
+    superuser.confirmed_at = time.time()
     superuser.save()
     
     UserRole.create(user=superuser, role=superuser_role)
