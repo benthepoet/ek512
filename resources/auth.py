@@ -5,7 +5,7 @@ import json
 
 import lib.security as security
 
-class Confirm(object):
+class ConfirmToken(object):
     def on_post(self, req, resp, token):
         security.confirm_user(token)
         resp.status = falcon.HTTP_204
@@ -21,7 +21,7 @@ class Login(object):
         
         resp.media = dict(token=token.decode())
         
-class Reset(object):
+class ResetToken(object):
     def on_post(self, req, resp, token):
         security.reset_password(token)
         resp.status = falcon.HTTP_204
@@ -34,4 +34,6 @@ class SignUp(object):
             raise falcon.HTTPError(falcon.HTTP_400)
             
         security.create_user(**data)
+        security.send_confirm_email(data['email'])
+        
         resp.status = falcon.HTTP_204
