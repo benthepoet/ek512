@@ -11,7 +11,7 @@ import seeds.test as seed
 
 db_filename = os.environ.get('DB_FILENAME') or ':memory:'
 
-database.init(db_filename)
+database.init(db_filename, pragmas={'journal_mode': 'wal'})
 database.create_tables([Document, Element, ElementType, Role, User, UserRole])
 
 if db_filename == ':memory:':
