@@ -21,9 +21,7 @@ test:
   - source .env/bin/activate
   - pip install -r requirements.txt
   script:
-  - python -m tests.auth
-  - python -m tests.documents
-  - python -m tests.users
+  - python -m unittest
   
 deploy_test:
   stage: deploy

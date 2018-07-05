@@ -4,16 +4,20 @@ from playhouse.shortcuts import model_to_dict, update_model_from_dict
 
 from lib.models import Document, Element
 
-def create(**data):
-    document = Document.create(**data)
+def create(user_id, data):
+    document = Document.create(**dict(data, owner=user_id))
     return model_to_dict(document, recurse=False)
 
-def create_element(data):
-    element = Element.create(**data)
+def create_element(user_id, document_id, data):
+    document = select_document(user_id, document_id)
+    element = Element.create(**dict(data, document_id=document.id))
     return model_to_dict(element, recurse=False)
 
 def find(user_id):
-    return list(select_documents(user_id).dicts())
+    return list(
+        select_documents(user_id)
+        .dicts()
+    )
     
 def find_elements(user_id, document_id):
     return list(

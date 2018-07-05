@@ -30,6 +30,3 @@ class TestAuth(unittest.TestCase):
         response = test_app.post_json('/auth/signup', params, status=409)
         
         self.assertEqual(response.status_code, 409)
-
-if __name__ == '__main__':
-    unittest.main()

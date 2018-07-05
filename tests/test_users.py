@@ -23,6 +23,3 @@ class TestAuth(unittest.TestCase):
         self.assertIsNotNone(user)
         self.assertEqual(user.get('id'), USER_ID)
         self.assertIsNone(user.get('hash'))
-
-if __name__ == '__main__':
-    unittest.main()

@@ -91,6 +91,3 @@ class TestAuth(unittest.TestCase):
         response = test_app.put_json('/documents/%s/elements/%s' % (DOCUMENT_ID + 1, ELEMENT_ID), params, status=404)
         
         self.assertEqual(response.status_code, 404)
-
-if __name__ == '__main__':
-    unittest.main()
