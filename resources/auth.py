@@ -5,7 +5,7 @@ import lib.security as security
 class Confirm(object):
     def on_post(self, req, resp):
         data = req.media
-        security.send_confirm_email(data['email'])
+        security.send_confirm_email(**data)
         resp.status = falcon.HTTP_204
 
 class ConfirmToken(object):
@@ -22,7 +22,7 @@ class Login(object):
 class Reset(object):
     def on_post(self, req, resp):
         data = req.media
-        security.send_reset_email(data['email'])
+        security.send_reset_email(**data)
         resp.status = falcon.HTTP_204
         
 class ResetToken(object):
