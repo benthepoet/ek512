@@ -3,30 +3,34 @@ image: python:latest
 variables:
   BUILD_ENV: "test"
   SSH_DOMAIN: "benpaulhanna.com"
-
-cache:
-  paths:
-    - .env/
     
 stages:
   - test
   - deploy
 
 test:
+  cache:
+    paths:
+      - .env/
+  
   stage: test
+  
   before_script:
   - python -V
   - pip install virtualenv
   - virtualenv .env
   - source .env/bin/activate
   - pip install -r requirements.txt
+  
   script:
   - python -m unittest
   
-deploy_test:
+deploy:
   stage: deploy
+  
   only:
   - master
+  
   before_script:
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
   - eval $(ssh-agent -s)
@@ -36,6 +40,7 @@ deploy_test:
   - ssh-keyscan "$SSH_DOMAIN" >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  
   script:
   - git remote add staging "bannon@$SSH_DOMAIN:/var/repo/ek512.git"
   - git push staging master
