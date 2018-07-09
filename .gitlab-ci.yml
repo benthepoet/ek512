@@ -1,7 +1,6 @@
 image: python:latest
 
 variables:
-  BUILD_ENV: "test"
   SSH_DOMAIN: "benpaulhanna.com"
     
 stages:
