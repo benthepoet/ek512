@@ -3,8 +3,8 @@ from webtest import TestApp
 
 from app import api
 
-DOCUMENT_ID = 1
-ELEMENT_ID = 1
+DOCUMENT_ID = 2
+ELEMENT_ID = 2
 USER_ID = 1
 
 test_app = TestApp(api)
