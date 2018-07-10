@@ -16,8 +16,11 @@ def run():
     
     UserRole.create(user=editor, role=editor_role)
     
-    document = Document.create(name='My Document', owner=editor, width=512, height=512)
+    document = Document.create(name='First Document', owner=editor, width=512, height=512)
     Element.create(document=document, element_type=circle_type, x=0, y=0)
+    
+    document = Document.create(name='Second Document', owner=editor, width=640, height=480)
+    Element.create(document=document, element_type=rect_type, x=0, y=0)
     
     superuser_role = Role.create(name='Superuser')
     
@@ -28,7 +31,7 @@ def run():
     
     UserRole.create(user=superuser, role=superuser_role)
     
-    document = Document.create(name='My Document', owner=superuser, width=256, height=256)
+    document = Document.create(name='First Document', owner=superuser, width=256, height=256)
     Element.create(document=document, element_type=rect_type, x=0, y=0)
     
 if __name__ == '__main__':
