@@ -32,7 +32,7 @@ def authenticate(email, password):
         'user_id': user.id
     }
 
-    return jwt.encode(claims, 'secret', algorithm='HS256')
+    return (user.id, jwt.encode(claims, 'secret', algorithm='HS256'))
 
 def confirm_user(token):
     try:

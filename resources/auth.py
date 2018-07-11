@@ -1,5 +1,6 @@
 import falcon
 
+import lib.helpers as helpers
 import lib.security as security
 
 class Confirm(object):
@@ -16,8 +17,9 @@ class ConfirmToken(object):
 class Login(object):
     def on_post(self, req, resp):
         data = req.media
-        token = security.authenticate(**data)
-        resp.media = dict(token=token.decode())
+        user_id, token = security.authenticate(**data)
+        user = security.get_user(user_id)
+        resp.body = helpers.to_json(dict(user, token=token.decode()))
         
 class Reset(object):
     def on_post(self, req, resp):
