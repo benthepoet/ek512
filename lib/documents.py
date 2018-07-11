@@ -13,9 +13,10 @@ def create_element(user_id, document_id, data):
     element = Element.create(**dict(data, document_id=document.id))
     return model_to_dict(element, recurse=False)
 
-def find(user_id):
+def find(user_id, search=''):
     return list(
         select_documents(user_id)
+        .where(Document.name.contains(search))
         .dicts()
     )
     

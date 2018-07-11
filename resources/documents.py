@@ -9,7 +9,8 @@ import lib.documents as documents
 class DocumentCollection(object):
     @helpers.authorize
     def on_get(self, req, resp, user_id):
-        resp.body = helpers.to_json(dict(data=documents.find(user_id)))
+        data = documents.find(user_id, **req.params)
+        resp.body = helpers.to_json(dict(data=data))
         
     @helpers.authorize
     def on_post(self, req, resp, user_id):
