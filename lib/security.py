@@ -32,7 +32,8 @@ def authenticate(email, password):
         'user_id': user.id
     }
 
-    return (user.id, jwt.encode(claims, 'secret', algorithm='HS256'))
+    safe_user = model_to_dict(user, recurse=False, exclude=[User.hash])
+    return (safe_user, jwt.encode(claims, 'secret', algorithm='HS256'))
 
 def confirm_user(token):
     try:

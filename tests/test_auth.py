@@ -10,8 +10,10 @@ class TestAuth(unittest.TestCase):
     def test_login(self):
         params = dict(email='editor@home.com', password='abc123')
         response = test_app.post_json('/auth/login', params)
+        user = response.json
         
         self.assertEqual(response.status_code, 200)
+        self.assertIsNone(user.get('hash'))
         
     def test_login_not_found(self):
         params = dict(email='user@home.com', password='ghi789')

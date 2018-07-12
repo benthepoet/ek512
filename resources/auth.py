@@ -17,8 +17,7 @@ class ConfirmToken(object):
 class Login(object):
     def on_post(self, req, resp):
         data = req.media
-        user_id, token = security.authenticate(**data)
-        user = security.get_user(user_id)
+        user, token = security.authenticate(**data)
         resp.body = helpers.to_json(dict(user, token=token.decode()))
         
 class Reset(object):

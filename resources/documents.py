@@ -41,4 +41,4 @@ class Element(object):
     @helpers.authorize
     def on_put(self, req, resp, user_id, document_id, element_id):
         data = req.media
-        resp.body = helpers.to_json(dict(data=documents.update_element(user_id, document_id, element_id, data)))
+        resp.body = helpers.to_json(documents.update_element(user_id, document_id, element_id, data))
