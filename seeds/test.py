@@ -17,10 +17,10 @@ def run():
     UserRole.create(user=editor, role=editor_role)
     
     document = Document.create(name='First Document', owner=editor, width=512, height=512)
-    Element.create(document=document, element_type=circle_type, x=0, y=0)
+    Element.create(document=document, element_type=circle_type, x=50, y=50, radius=45)
     
     document = Document.create(name='Second Document', owner=editor, width=640, height=480)
-    Element.create(document=document, element_type=rect_type, x=0, y=0)
+    Element.create(document=document, element_type=rect_type, x=200, y=200, width=150, height=100)
     
     superuser_role = Role.create(name='Superuser')
     
