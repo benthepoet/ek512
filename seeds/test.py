@@ -32,7 +32,7 @@ def run():
     UserRole.create(user=superuser, role=superuser_role)
     
     document = Document.create(name='First Document', owner=superuser, width=256, height=256)
-    Element.create(document=document, element_type=rect_type, x=0, y=0)
+    Element.create(document=document, element_type=rect_type, x=0, y=0, width=32, height=32)
     
 if __name__ == '__main__':
     run()
