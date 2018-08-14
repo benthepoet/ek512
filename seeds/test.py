@@ -33,8 +33,8 @@ def run():
     UserRole.create(user=superuser, role=superuser_role)
     
     document = Document.create(name='First Document', owner=superuser, width=256, height=256)
-    Element.create(document=document, element_type=rect_type, attributes=dict(x=0, y=0, width=48, height=48))
-    Element.create(document=document, element_type=text_box_type, attributes=dict(x=32, y=64, text='Hello World'))
+    Element.create(document=document, element_type=rect_type, attributes=dict(x=48, y=32, width=48, height=48))
+    Element.create(document=document, element_type=text_box_type, attributes=dict(x=112, y=64, text='Hello World'))
     
 if __name__ == '__main__':
     run()
