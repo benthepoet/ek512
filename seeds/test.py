@@ -6,6 +6,7 @@ import lib.security as security
 def run():
     circle_type = ElementType.create(name='Circle')
     rect_type = ElementType.create(name='Rectangle')
+    text_box_type = ElementType.create(name='Text Box')
     
     editor_role = Role.create(name='Editor')
     
@@ -33,6 +34,7 @@ def run():
     
     document = Document.create(name='First Document', owner=superuser, width=256, height=256)
     Element.create(document=document, element_type=rect_type, attributes=dict(x=0, y=0, width=48, height=48))
+    Element.create(document=document, element_type=text_box_type, attributes=dict(x=32, y=64, text='Hello World'))
     
 if __name__ == '__main__':
     run()
