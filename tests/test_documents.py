@@ -77,13 +77,13 @@ class TestAuth(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         
     def test_update_element(self):
-        params = dict(x=64, y=64)
+        params = dict(attributes=dict(x=64, y=64))
         response = test_app.put_json('/documents/%s/elements/%s' % (DOCUMENT_ID, ELEMENT_ID), params)
         
         self.assertEqual(response.status_code, 200)
         
     def test_update_element_user_scoping(self):
-        params = dict(x=64, y=64)
+        params = dict(attributes=dict(x=64, y=64))
         response = test_app.put_json('/documents/%s/elements/%s' % (DOCUMENT_ID, ELEMENT_ID + 1), params, status=404)
         
         self.assertEqual(response.status_code, 404)

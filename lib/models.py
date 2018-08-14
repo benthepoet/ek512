@@ -1,8 +1,17 @@
+import json
 import time
 import uuid
 from peewee import *
 
 database = SqliteDatabase(None)
+
+class JSONField(TextField):
+
+    def db_value(self, value):
+        return json.dumps(value)
+        
+    def python_value(self, value):
+        return json.loads(value)
 
 class BaseModel(Model):
     class Meta:
@@ -35,8 +44,4 @@ class ElementType(BaseModel):
 class Element(BaseModel):
     document = ForeignKeyField(Document, backref='elements')
     element_type = ForeignKeyField(ElementType)
-    x = IntegerField()
-    y = IntegerField()
-    width = IntegerField(default=0, constraints=[Check('width >= 0')])
-    height = IntegerField(default=0, constraints=[Check('height >= 0')])
-    radius = IntegerField(default=0, constraints=[Check('radius >= 0')])
+    attributes = JSONField()
