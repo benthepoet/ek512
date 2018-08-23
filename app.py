@@ -18,7 +18,7 @@ database.create_tables([Document, Element, ElementType, Role, User, UserRole])
 if db_filename == ':memory:':
     seed.run()
 
-cors = falcon_cors.CORS(allow_all_headers=True, allow_all_origins=True)
+cors = falcon_cors.CORS(allow_all_headers=True, allow_all_methods=True, allow_all_origins=True)
 api = falcon.API(middleware=[cors.middleware])
 
 api.add_route('/auth/confirm', auth.Confirm())
