@@ -1,4 +1,5 @@
 import falcon
+import falcon_cors
 import os
 
 from lib.models import *
@@ -17,7 +18,8 @@ database.create_tables([Document, Element, ElementType, Role, User, UserRole])
 if db_filename == ':memory:':
     seed.run()
 
-api = falcon.API()
+cors = falcon_cors.CORS(allow_all_origins=True)
+api = falcon.API(middleware=[cors.middleware])
 
 api.add_route('/auth/confirm', auth.Confirm())
 api.add_route('/auth/confirm/{token}', auth.ConfirmToken())
