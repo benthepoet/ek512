@@ -5,14 +5,6 @@ from peewee import *
 
 database = SqliteDatabase(None)
 
-class JSONField(TextField):
-
-    def db_value(self, value):
-        return json.dumps(value)
-        
-    def python_value(self, value):
-        return json.loads(value)
-
 class BaseModel(Model):
     class Meta:
         database = database
@@ -44,4 +36,9 @@ class ElementType(BaseModel):
 class Element(BaseModel):
     document = ForeignKeyField(Document, backref='elements')
     element_type = ForeignKeyField(ElementType)
-    attributes = JSONField()
+    x = IntegerField()
+    y = IntegerField()
+    width = IntegerField(default=0)
+    height = IntegerField(default=0)
+    radius = IntegerField(default=0)
+    text = CharField(default='')
