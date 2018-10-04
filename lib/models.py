@@ -42,3 +42,4 @@ class Element(BaseModel):
     height = IntegerField(default=0)
     radius = IntegerField(default=0)
     text = CharField(default='')
+    stroke_width = IntegerField(default=0)
